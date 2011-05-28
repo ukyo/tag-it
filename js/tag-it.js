@@ -1,6 +1,8 @@
 (function($) {
 
 	$.fn.tagit = function(options) {
+    
+    options = $.extend({inputName: 'item[tags][]', availableTags: [], defaultValues: []}, options || {});
 
 		var el = this;
 
@@ -13,11 +15,16 @@
 		el.addClass("tagit");
 
 		// create the input field.
-		var html_input_field = "<li class=\"tagit-new\"><input class=\"tagit-input\" type=\"text\" /></li>\n";
+		var html_input_field = '<li class="tagit-new"><input class="tagit-input" type="text" /></li>\n';
 		el.html (html_input_field);
 
 		tag_input		= el.children(".tagit-new").children(".tagit-input");
-
+    
+    //init
+    $.each(options.defaultValues, function(){
+      create_choice(this);
+    });
+    
 		$(this).click(function(e){
 			if (e.target.tagName == 'A') {
 				// Removes a tag when the little 'x' is clicked.
@@ -82,10 +89,10 @@
 		}
 		function create_choice (value){
 			var el = "";
-			el  = "<li class=\"tagit-choice\">\n";
+			el  = '<li class="tagit-choice">\n';
 			el += value + "\n";
-			el += "<a class=\"close\">x</a>\n";
-			el += "<input type=\"hidden\" style=\"display:none;\" value=\""+value+"\" name=\"item[tags][]\">\n";
+			el += '<a class="close">x</a>\n';
+			el += '<input type="hidden" style="display:none;" value="'+value+'" name="'+options.inputName+'">\n';
 			el += "</li>\n";
 			var li_search_tags = this.tag_input.parent();
 			$(el).insertBefore (li_search_tags);
